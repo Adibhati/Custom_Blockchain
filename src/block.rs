@@ -1,4 +1,4 @@
-//! Block implement of blockchain
+
 
 use super::*;
 use crate::transaction::Transaction;
@@ -13,7 +13,7 @@ use log::info;
 
 const TARGET_HEXS: usize = 4;
 
-/// Block keeps block headers
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Block {
     timestamp: u128,
@@ -41,7 +41,7 @@ impl Block {
         self.height
     }
 
-    /// NewBlock creates and returns Block
+
     pub fn new_block(
         transactions: Vec<Transaction>,
         prev_block_hash: String,
@@ -62,12 +62,12 @@ impl Block {
         Ok(block)
     }
 
-    /// NewGenesisBlock creates and returns genesis Block
+
     pub fn new_genesis_block(coinbase: Transaction) -> Block {
         Block::new_block(vec![coinbase], String::new(), 0).unwrap()
     }
 
-    /// Run performs a proof-of-work
+
     fn run_proof_of_work(&mut self) -> Result<()> {
         info!("Mining the block");
         while !self.validate()? {
@@ -80,7 +80,7 @@ impl Block {
         Ok(())
     }
 
-    /// HashTransactions returns a hash of the transactions in the block
+
     fn hash_transactions(&self) -> Result<Vec<u8>> {
         let mut transactions = Vec::new();
         for tx in &self.transactions {
@@ -103,7 +103,7 @@ impl Block {
         Ok(bytes)
     }
 
-    /// Validate validates block's PoW
+
     fn validate(&self) -> Result<bool> {
         let data = self.prepare_hash_data()?;
         let mut hasher = Sha256::new();

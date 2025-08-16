@@ -1,4 +1,4 @@
-//! bitcoin wallet
+//! here on theres the starting for the bitcoin wallet
 
 use super::*;
 use bincode::{deserialize, serialize};
@@ -21,7 +21,7 @@ pub struct Wallet {
 }
 
 impl Wallet {
-    /// NewWallet creates and returns a Wallet
+
     fn new() -> Self {
         let mut key: [u8; 32] = [0; 32];
         let mut rand = OsRng::default();
@@ -35,7 +35,7 @@ impl Wallet {
         }
     }
 
-    /// GetAddress returns wallet address
+
     pub fn get_address(&self) -> String {
         let mut pub_hash: Vec<u8> = self.public_key.clone();
         hash_pub_key(&mut pub_hash);
@@ -49,7 +49,7 @@ impl Wallet {
     }
 }
 
-/// HashPubKey hashes public key
+
 pub fn hash_pub_key(pubKey: &mut Vec<u8>) {
     let mut hasher1 = Sha256::new();
     hasher1.input(pubKey);
@@ -65,7 +65,7 @@ pub struct Wallets {
 }
 
 impl Wallets {
-    /// NewWallets creates Wallets and fills it from a file if it exists
+
     pub fn new() -> Result<Wallets> {
         let mut wlt = Wallets {
             wallets: HashMap::<String, Wallet>::new(),
@@ -82,7 +82,7 @@ impl Wallets {
         Ok(wlt)
     }
 
-    /// CreateWallet adds a Wallet to Wallets
+
     pub fn create_wallet(&mut self) -> String {
         let wallet = Wallet::new();
         let address = wallet.get_address();
@@ -91,7 +91,7 @@ impl Wallets {
         address
     }
 
-    /// GetAddresses returns an array of addresses stored in the wallet file
+
     pub fn get_all_addresses(&self) -> Vec<String> {
         let mut addresses = Vec::<String>::new();
         for (address, _) in &self.wallets {
@@ -100,7 +100,7 @@ impl Wallets {
         addresses
     }
 
-    /// GetWallet returns a Wallet by its address
+
     pub fn get_wallet(&self, address: &str) -> Option<&Wallet> {
         self.wallets.get(address)
     }

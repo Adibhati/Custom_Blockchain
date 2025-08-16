@@ -1,4 +1,4 @@
-//! unspend transaction output set
+
 
 use super::*;
 use crate::block::*;
@@ -8,13 +8,13 @@ use bincode::{deserialize, serialize};
 use sled;
 use std::collections::HashMap;
 
-/// UTXOSet represents UTXO set
+
 pub struct UTXOSet {
     pub blockchain: Blockchain,
 }
 
 impl UTXOSet {
-    /// FindUnspentTransactions returns a list of transactions containing unspent outputs
+
     pub fn find_spendable_outputs(
         &self,
         pub_key_hash: &[u8],
@@ -45,7 +45,7 @@ impl UTXOSet {
         Ok((accumulated, unspent_outputs))
     }
 
-    /// FindUTXO finds UTXO for a public key hash
+
     pub fn find_UTXO(&self, pub_key_hash: &[u8]) -> Result<TXOutputs> {
         let mut utxos = TXOutputs {
             outputs: Vec::new(),
@@ -66,7 +66,7 @@ impl UTXOSet {
         Ok(utxos)
     }
 
-    /// CountTransactions returns the number of transactions in the UTXO set
+
     pub fn count_transactions(&self) -> Result<i32> {
         let mut counter = 0;
         let db = sled::open("data/utxos")?;
@@ -91,9 +91,9 @@ impl UTXOSet {
         Ok(())
     }
 
-    /// Update updates the UTXO set with transactions from the Block
-    ///
-    /// The Block is considered to be the tip of a blockchain
+
+
+
     pub fn update(&self, block: &Block) -> Result<()> {
         let db = sled::open("data/utxos")?;
 

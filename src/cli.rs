@@ -137,9 +137,6 @@ impl Cli {
             }
 
 
-            /*else {
-                println!("Not printing testing lists...");
-            }*/
         }
 
         if let Some(_) = matches.subcommand_matches("printchain") {

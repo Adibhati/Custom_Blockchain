@@ -1,4 +1,4 @@
-//! transaction implement
+
 
 use super::*;
 use crate::utxoset::*;
@@ -17,7 +17,6 @@ use rand::rngs::OsRng;
 
 const SUBSIDY: i32 = 10;
 
-/// TXInput represents a transaction input
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TXInput {
     pub txid: String,
@@ -25,21 +24,19 @@ pub struct TXInput {
     pub signature: Vec<u8>,
     pub pub_key: Vec<u8>,
 }
-
-/// TXOutput represents a transaction output
+ 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TXOutput {
     pub value: i32,
     pub pub_key_hash: Vec<u8>,
 }
 
-// TXOutputs collects TXOutput
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TXOutputs {
     pub outputs: Vec<TXOutput>,
 }
 
-/// Transaction represents a Bitcoin transaction
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Transaction {
     pub id: String,
@@ -48,7 +45,6 @@ pub struct Transaction {
 }
 
 impl Transaction {
-    /// NewUTXOTransaction creates a new transaction
     pub fn new_UTXO(wallet: &Wallet, to: &str, amount: i32, utxo: &UTXOSet) -> Result<Transaction> {
         info!(
             "new UTXO Transaction from: {} to: {}",
@@ -98,7 +94,7 @@ impl Transaction {
         Ok(tx)
     }
 
-    /// NewCoinbaseTX creates a new coinbase transaction
+
     pub fn new_coinbase(to: String, mut data: String) -> Result<Transaction> {
         info!("new coinbase Transaction to: {}", to);
         let mut key: [u8; 32] = [0; 32];
@@ -124,12 +120,12 @@ impl Transaction {
         Ok(tx)
     }
 
-    /// IsCoinbase checks whether the transaction is coinbase
+
     pub fn is_coinbase(&self) -> bool {
         self.vin.len() == 1 && self.vin[0].txid.is_empty() && self.vin[0].vout == -1
     }
 
-    /// Verify verifies signatures of Transaction inputs
+
     pub fn verify(&self, prev_TXs: HashMap<String, Transaction>) -> Result<bool> {
         if self.is_coinbase() {
             return Ok(true);
@@ -164,7 +160,7 @@ impl Transaction {
         Ok(true)
     }
 
-    /// Sign signs each input of a Transaction
+
     pub fn sign(
         &mut self,
         private_key: &[u8],
@@ -197,7 +193,7 @@ impl Transaction {
         Ok(())
     }
 
-    /// Hash returns the hash of the Transaction
+
     pub fn hash(&self) -> Result<String> {
         let mut copy = self.clone();
         copy.id = String::new();
@@ -207,7 +203,7 @@ impl Transaction {
         Ok(hasher.result_str())
     }
 
-    /// TrimmedCopy creates a trimmed copy of Transaction to be used in signing
+
     fn trim_copy(&self) -> Transaction {
         let mut vin = Vec::new();
         let mut vout = Vec::new();
@@ -237,11 +233,11 @@ impl Transaction {
 }
 
 impl TXOutput {
-    /// IsLockedWithKey checks if the output can be used by the owner of the pubkey
+
     pub fn is_locked_with_key(&self, pub_key_hash: &[u8]) -> bool {
         self.pub_key_hash == pub_key_hash
     }
-    /// Lock signs the output
+
     fn lock(&mut self, address: &str) -> Result<()> {
         let pub_key_hash = Address::decode(address).unwrap().body;
         debug!("lock: {}", address);

@@ -1,4 +1,4 @@
-//! server of Blockchain
+
 
 use super::*;
 use crate::block::*;
@@ -139,7 +139,7 @@ impl Server {
         Ok(())
     }
 
-    /* ------------------- inner halp functions ----------------------------------*/
+    /* Starting for the inner help functions */
 
     fn remove_node(&self, addr: &str) {
         self.inner.lock().unwrap().known_nodes.remove(addr);
